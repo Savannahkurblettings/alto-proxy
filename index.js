@@ -36,11 +36,11 @@ const parseXml = (xml) => {
 
 async function getToken() {
   if (cachedToken && tokenExpiry && Date.now() < tokenExpiry) {
-    console.log('🔑 Using cached token');
+    console.log('Using cached token');
     return cachedToken;
   }
 
-  console.log('🔑 Getting new token from Alto...');
+  console.log('Getting new token from Alto...');
   
   const authString = Buffer.from(`${ALTO_USERNAME}:${ALTO_PASSWORD}`).toString('base64');
   
@@ -60,7 +60,7 @@ async function getToken() {
   cachedToken = token;
   tokenExpiry = Date.now() + (10 * 60 * 1000);
   
-  console.log('✅ New token received');
+  console.log('New token received');
   return token;
 }
 
@@ -87,12 +87,12 @@ app.get('/health', (req, res) => {
 
 app.post('/import', authenticate, async (req, res) => {
   try {
-    console.log('🔵 Alto Import Request Received');
+    console.log('Alto Import Request Received');
     
     const { agent_email } = req.body;
     const token = await getToken();
     
-    console.log('📦 Fetching properties...');
+    console.log('Fetching properties...');
     const propertiesXml = await fetchFromAlto(
       `${API_BASE}/branch/${ALTO_BRANCH_ID}/property`,
       token
@@ -102,7 +102,7 @@ app.post('/import', authenticate, async (req, res) => {
     const properties = propertiesData?.properties?.property || [];
     const propertyList = Array.isArray(properties) ? properties : [properties];
     
-    console.log(`✅ Found ${propertyList.length} properties`);
+    console.log(`Found ${propertyList.length} properties`);
     
     const processedProperties = [];
     let skipped = 0;
@@ -155,7 +155,7 @@ app.post('/import', authenticate, async (req, res) => {
       }
     }
     
-    console.log(`✅ Processed ${processedProperties.length} properties`);
+    console.log(`Processed ${processedProperties.length} properties`);
     
     res.json({
       success: true,
@@ -167,7 +167,7 @@ app.post('/import', authenticate, async (req, res) => {
     });
     
   } catch (error) {
-    console.error('❌ Import error:', error.message);
+    console.error('Import error:', error.message);
     res.status(500).json({
       success: false,
       error: error.message
@@ -226,6 +226,6 @@ function mapType(rmType) {
 }
 
 app.listen(PORT, () => {
-  console.log(`🚀 Alto Proxy Server running on port ${PORT}`);
-  console.log('✅ All Alto requests will come from THIS server's single IP');
+  console.log(`Alto Proxy Server running on port ${PORT}`);
+  console.log('All Alto requests will come from this single IP');
 });
