@@ -1,13 +1,14 @@
 {
   "name": "alto-proxy",
   "version": "1.0.0",
-  "type": "module",
+  "description": "Proxy server for Alto API with consistent IP",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "node-fetch": "^3.3.2",
+    "axios": "^1.6.2",
     "xml2js": "^0.6.2"
   }
 }
